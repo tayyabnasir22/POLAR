@@ -34,8 +34,10 @@ class RealWorldValidationHelper(ValidationHelperBase):
                 # Conver the rgb image and the lr image into patches
                 out, gt_norm = self.GetInference(batch, model)
 
-                rmse = Evaluation.DepthRMSE(out, gt_norm, batch['max'], batch['min'], shave_pixels=shave)
-                rmse_res.SetItem(rmse, batch['rgb'].shape[0])
+                # mask is all ones for RGB-D-D and the valid-GT mask (0.1 m - 5 m) for TOFDSR
+                rmse = Evaluation.DepthRMSE(out, gt_norm, batch['max'], batch['min'], shave_pixels=shave, mask=batch['mask'])
+                if rmse == rmse: # skip NaN (image without any valid GT pixel)
+                    rmse_res.SetItem(rmse, batch['rgb'].shape[0])
 
         return {
             'RMSE': rmse_res.GetItem()

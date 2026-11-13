@@ -61,7 +61,12 @@ class RealWorldTrainingHelper(TrainingHelperBase):
             out, clean_lr, boundaries = model(batch['rgb'], batch['lr'])
 
             # 4.3 Get L1 loss b/w GT and predicted HR
-            loss = self.loss(out, batch['gt_norm'], clean_lr, batch['clean_lr_norm'], boundaries)
+            valid = batch['mask'] > 0.5
+            valid_lr = batch['mask_lr'] > 0.5
+            gt_target = torch.where(valid, batch['gt_norm'], out.detach())
+            clean_lr_target = torch.where(valid_lr, batch['clean_lr_norm'], clean_lr.detach())
+            
+            loss = self.loss(out, gt_target, clean_lr, clean_lr_target, boundaries)
             
             # 4.7 Log the epoch-step, loss, and metric
             evals = {}
@@ -72,7 +77,9 @@ class RealWorldTrainingHelper(TrainingHelperBase):
             # 4.8 Accumulate the loss for the step
             all_loss_avg.SetItem(loss.item())
 
-            rmse_sr_avg.SetItem(Evaluation.DepthRMSE(out, batch['gt_norm'], batch['max'], batch['min']))
+            train_rmse = Evaluation.DepthRMSE(out, batch['gt_norm'], batch['max'], batch['min'], mask=batch['mask'])
+            if train_rmse == train_rmse: # skip NaN (batch without any valid GT pixel)
+                rmse_sr_avg.SetItem(train_rmse)
             
             # 4.9 Back propogate
             optimizer.zero_grad()
