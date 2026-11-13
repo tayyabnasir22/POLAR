@@ -12,7 +12,7 @@ from Components.SpatialDetailsFusion import SpatialDetailsFusion
 from Components.UpscaleDenseProjection import UpscaleDenseProjection
 from Components.BoundaryStudent import BoundaryStudent
 
-class POLAR(nn.Module):
+class POLAR_Real(nn.Module):
     def __init__(
             self,
             use_pretrained: bool,
@@ -24,7 +24,7 @@ class POLAR(nn.Module):
             freeze_dino: bool = True,
             train_mode: bool = True
         ):
-        super(POLAR, self).__init__()
+        super(POLAR_Real, self).__init__()
         self.training_mode = train_mode
         self.patch_size = patch_size
 
