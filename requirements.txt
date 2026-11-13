@@ -1,0 +1,15 @@
+setuptools<81
+pandas
+pillow
+tqdm
+torch
+tensorboardX
+pyyaml
+imageio
+torchvision
+matplotlib
+torchinfo
+torchmetrics[image]
+python-dotenv
+PyWavelets
+pytorch_wavelets
