@@ -14,14 +14,14 @@ def main(scale, model):
     PathManager.BASE_PATH = './'
     TrainingOrchestrator.SCALE = scale
     TrainingOrchestrator.MODEL = models[model]
-    TrainingOrchestrator.BENCHMARK = BenchmarkType.RGBDDReal
+    TrainingOrchestrator.BENCHMARK = BenchmarkType.TOFDSRDReal
 
-    TrainingOrchestrator.REPEAT = 2 # 1 for HYPERSIM x8, 2 for all else
-    TrainingOrchestrator.BATCH = 2
+    TrainingOrchestrator.REPEAT = 1 # 1 for HYPERSIM x8, and TOFDSR Real, 2 for all else
+    TrainingOrchestrator.BATCH = 3
     
     TrainingOrchestrator.Train()
 
 if __name__ == '__main__':
     args_len = len(sys.argv) - 1
 
-    main(int(sys.argv[1]), int(sys.argv[2]))
+    main(int(sys.argv[1]), str(sys.argv[2]))

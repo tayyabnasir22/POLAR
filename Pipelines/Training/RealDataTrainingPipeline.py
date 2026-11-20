@@ -24,3 +24,18 @@ class RealDataTrainingPipeline(BaseTrainingPipeline):
             ),
             self.configurations.data_configurations.batch_size,
         )
+
+    # def LoadConfigurations(self):
+    #     super().LoadConfigurations()
+
+    #     base = os.path.basename(os.path.normpath(self._train_data_path))
+    #     if base == BenchmarkType.TOFDSRDReal.name:
+    #         self.configurations.lr_scheduler['milestones'] = [16, 32, 48, 64, 80]
+
+    def LoadConfigurations(self):
+        super().LoadConfigurations()
+
+        base = os.path.basename(os.path.normpath(self._train_data_path))
+        if base == BenchmarkType.TOFDSRDReal.name:
+            self.configurations.lr_scheduler['milestones'] = [22, 40, 52]
+            self.configurations.epochs = 60
